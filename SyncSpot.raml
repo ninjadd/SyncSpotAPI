@@ -1,0 +1,29 @@
+#%RAML 1.0
+title: SyncSpot
+version: 1.0
+baseUri: api/v1
+description: A document laying the current SyncSpot API
+
+
+
+/login:
+  post:
+    body:
+      application/json:
+        type: object
+        properties:
+          login: string
+          password: string
+    responses:
+      400:
+        description: 400 BAD REQUEST
+      403:
+        description: null
+      200:
+        description: Profile in JSON
+
+/logout:
+  get:
+    responses:
+      403:
+        description: null
