@@ -27,3 +27,74 @@ description: A document laying the current SyncSpot API
     responses:
       403:
         description: null
+
+/setpassword:
+  post:
+    body:
+      application/json:
+        type: object
+        properties:
+          password: string
+    responses:
+      403:
+        description: null
+      304:
+        description:  NOT MODIFIED if failed to set
+      200:
+        description: null
+
+/signin/facebook:
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          profile_confired: string
+    responses:
+      403:
+        description: if profile was not confirmed
+      404:
+        description: no such social profile registered
+      200:
+        description: set session cookie
+
+/sign/gplus:
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          redirsuccess: string
+          redirfail: string
+          access:  string
+    responses:
+      403:
+        description: null
+      404:
+        description: no such social profile registered
+      200:
+        description: null
+
+/resetemail:
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          email: string
+          password: string
+
+/resetpassword:
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          email: string
+    responses:
+      409:
+        description: email is not confirmed
+      404:
+        description: no email found
+      202:
+        description: password sent
