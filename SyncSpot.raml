@@ -1,12 +1,11 @@
 #%RAML 1.0
 title: SyncSpot
 version: 1.0
-baseUri: api/v1
-description: A document laying the current SyncSpot API
-
-
+baseUri: https://app.thesyncspot.com/api/v1
+description: A document laying out the current SyncSpot API
 
 /login:
+  description: login with password
   post:
     body:
       application/json:
@@ -29,6 +28,7 @@ description: A document laying the current SyncSpot API
         description: null
 
 /setpassword:
+  description: Temp method to set password
   post:
     body:
       application/json:
@@ -44,6 +44,7 @@ description: A document laying the current SyncSpot API
         description: null
 
 /signin/facebook:
+  description: Sign in using Facebook account
   get:
     body:
       application/json:
@@ -59,6 +60,7 @@ description: A document laying the current SyncSpot API
         description: set session cookie
 
 /sign/gplus:
+  description: Sign in using Google account
   get:
     body:
       application/json:
@@ -76,6 +78,7 @@ description: A document laying the current SyncSpot API
         description: null
 
 /resetemail:
+  description: Send email with password reset link
   get:
     body:
       application/json:
@@ -85,6 +88,7 @@ description: A document laying the current SyncSpot API
           password: string
 
 /resetpassword:
+  description: Generate password and send to email
   get:
     body:
       application/json:
@@ -98,3 +102,197 @@ description: A document laying the current SyncSpot API
         description: no email found
       202:
         description: password sent
+
+/confirm:
+  description: Confirm email
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          id: number
+    responses:
+      304:
+        description: ; NOT MODIFIED if id value is wrong
+      200:
+        description: null
+
+/login/authorizeClient:
+  description: System/embeded browser should be started client auth with following URL
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+          provider: string
+    responses:
+      302:
+        description: Found; Response header "Location:/"
+      400:
+        description: BAD REQUEST
+
+/login/setClientId:
+  description: Set clientId authorization, sends frontend after sign in. Parameters fetch from cookies.
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+          provider: string
+    responses:
+      400:
+        description: BAD REQUEST
+      200:
+        description: null
+
+/login/exchangeId:
+  description: Exchange initial clientId on auth token
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        description: clientId
+      403:
+        description: null
+
+/register:
+  post:
+    body:
+      application/json:
+        type: object
+        properties:
+          email: string
+          login: string
+          password: string
+          name: string
+    responses:
+      409:
+        description: if have this email or login already
+      406:
+        description: if captha is wrong
+      200:
+        description: if confirmation sent
+
+/register/confirm:
+  description: Confirm profile's email
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          confirmId: number
+    responses:
+      404:
+        description: no such confirmId
+      200:
+        description: null
+
+/sync/contacts:
+  description: Get current sync process state
+  get:
+    responses:
+      200:
+        description: null
+      404:
+        description: null
+
+/sync/contacts/all:
+  description: Sync all active
+  get:
+    responses:
+      200:
+        description: null
+      404:
+        description: null
+
+/sync/contacts/google:
+  description: Import contacts (deprecated)
+  get:
+    responses:
+      403:
+        description: null
+      200:
+        description: Amount of imported contacts
+
+/sync/contacts/ios:
+  post:
+    description: Send contacts
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        description: null
+      404:
+        description: null
+  get:
+    description: Get contact changes
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        description: null
+      404:
+        description: null
+
+/sync/contacts/ios/open:
+  description: Get contact changes, set opened transaction
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+
+/sync/contacts/ios/close:
+  description: Close transaction. If transaction is opened, PUT [Contacts] is not acceptable and get contacts always return the same (the last transaction message).
+  post:
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            properties:
+              transactionId: number
+              created: string
+              failed: string
+            example:
+              transactionId: 100
+              created: "id:101, initialId:102"
+              failed: "null"
+
+  put:
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        body:
+          application/json:
+            type: object
+            properties:
+              transactionId: number
+              created: string
+              failed: string
+            example:
+              transactionId: 100
+              created: "id:101, initialId:102"
+              failed: "null"
