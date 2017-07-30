@@ -296,3 +296,555 @@ description: A document laying out the current SyncSpot API
               transactionId: 100
               created: "id:101, initialId:102"
               failed: "null"
+
+/sync/contacts/outlookagent:
+  post:
+    description: Send contacts
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        description: null
+      404:
+        description: null
+
+  get:
+    description: Get contact changes
+    body:
+      application/json:
+        type: object
+        properties:
+          clientId: number
+    responses:
+      200:
+        description: null
+      404:
+        description: null
+
+/sync/state:
+  get:
+    description: Get datasources sync state
+    responses:
+      403:
+        description: null
+  /{datasource}:
+    get:
+      description: Wait 1 minute for a successful plugin authorization
+      responses:
+        504:
+          description: null
+        200:
+          description: null
+    /{state}:
+      post:
+        description: If state=3 then wait for sync not more than 1 minute then return
+        body:
+          application/json:
+            type: object
+            properties:
+              datasource: string
+              state: integer
+
+/signin/getgooglephoto:
+  description: get google avatar photo
+  get:
+    body:
+      application/json:
+        type: object
+        properties:
+          href: string
+    responses:
+      403:
+        description: null
+      200:
+        description: photo
+
+/contact:
+  description: Create new user's contact
+  post:
+    responses:
+      404:
+        description: null
+      200:
+        description: null
+
+  /list:
+    description: Get user's contacts
+    post:
+      body:
+        application/json:
+          type: object
+          properties:
+            filterNetworks: array
+            networkId: number
+            filterCreationDate: string
+            startDate: datetime
+            endDate: datetime
+            filterRegion: array
+            withinRange: number
+            anyWhere: boolean
+            nearMe: boolean
+            address: string
+            sortings: array
+            sortingType: string
+            ascending: boolean
+            limit: number
+            offset: number
+      responses:
+        401:
+          description: null
+        200:
+          description: contacts in JSON
+
+  /filters:
+    description: Get all possible filter's values
+    post:
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+
+  /inviteList:
+    get:
+      description: Get contacts for invitation list
+      body:
+        application/json:
+          type: object
+          properties:
+            list: string
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+    post:
+      description: Send invitations
+      body:
+        application/json:
+          type: object
+          properties:
+            messageBody: string
+            contacts: array
+            id: number
+            social_id: number
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+
+  /{contactId}:
+    get:
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+    put:
+      description: Update conact
+      body:
+        application/json:
+          type: object
+          properties:
+            contactDetails: string
+      responses:
+        403:
+          description: null
+        200:
+          description: null
+    delete:
+      description: Delete contact
+      responses:
+        403:
+          description: null
+        200:
+          description: null
+    /phone:
+      get:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      post:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      /{phoneId}:
+        put:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+        delete:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+    /email:
+      get:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      post:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      /{emailId}:
+        put:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+        delete:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+    /addresses:
+      get:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      post:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      /{addressId}:
+        put:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+        delete:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+    /photoLinks:
+      get:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      post:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      /{photoLinkId}:
+        put:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+        delete:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+    /webSites:
+      get:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      post:
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+      /{webSiteId}:
+        put:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+        delete:
+          responses:
+            404:
+              description: null
+            200:
+              description: null
+
+/activity:
+  post:
+    description: Get activity using filters from SearchParam
+    body:
+      application/json:
+        type: object
+        properties:
+          searchParam: string
+    responses:
+      404:
+        description: null
+      200:
+        description: null
+  /{contactId}:
+    post:
+      description: Get activity for contactId
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+
+/profile:
+  get:
+    description: Get profile details
+    responses:
+      403:
+        description: null
+      200:
+        description: profile in JSON
+  put:
+    description: Update profile details (also after a first sign-in)
+    body:
+      application/json:
+        type: object
+        properties:
+          profile: array
+    responses:
+      404:
+        description: null
+      200:
+        description: null
+  delete:
+    description: Delete profile and it's contacts
+    body:
+      application/json:
+        type: object
+        properties:
+          sessionId: number
+    responses:
+      403:
+        description: null
+      304:
+        description: null
+      200:
+        description: null
+  /statistics:
+    description: Get profile statistics
+    get:
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+  /types/addresses:
+    get:
+      description: Get address types
+      body:
+        application/json:
+          type: object
+          properties:
+            type: string
+      responses:
+        200:
+          description: Element Types
+    post:
+      description: Create new address type
+      body:
+        application/json:
+          type: object
+          properties:
+            rel: string
+            relLabel: string
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+    /{addressTypeId}:
+        delete:
+          description: Delete custom address type
+          responses:
+            200:
+              description: count of deleted types
+  /types/emails:
+    get:
+      description: Get email types
+      body:
+        application/json:
+          type: object
+          properties:
+            type: string
+      responses:
+        200:
+          description: Element Types
+    post:
+      description: Create new email type
+      body:
+        application/json:
+          type: object
+          properties:
+            rel: string
+            relLabel: string
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+    /{emailsTypeId}:
+        delete:
+          description: Delete custom email type
+          responses:
+            200:
+              description: count of deleted types
+  /types/phones:
+    get:
+      description: Get phone types
+      body:
+        application/json:
+          type: object
+          properties:
+            type: string
+      responses:
+        200:
+          description: Element Types
+    post:
+      description: Create new phone type
+      body:
+        application/json:
+          type: object
+          properties:
+            rel: string
+            relLabel: string
+      responses:
+        404:
+          description: null
+        200:
+          description: null
+    /{phonesTypeId}:
+        delete:
+          description: Delete custom phone type
+          responses:
+            200:
+              description: count of deleted types
+
+/dupes:
+  get:
+    description: Collect duplicates
+    responses:
+      200:
+        description: filter count
+  /{filter}/shift:
+    get:
+      description: Get suspected duplicates
+      body:
+        application/json:
+          type: object
+          properties:
+            filter: string
+            exact_name: string
+            suspected_name: string
+            email: string
+            phone: string
+      responses:
+        200:
+          description: contact
+        404:
+          description: if no data for this shift value
+        403:
+          description: null
+    /select/{contactIndexAmongDupes}:
+      post:
+        description: Select contact
+        responses:
+          200:
+            description: contact
+    /delete/{contactIndexAmongDupes}:
+      post:
+        description: Not a duplicate
+        responses:
+          200:
+            description: null
+    /merge:
+      post:
+        description: Merge contacts
+        body:
+          application/json:
+            type: object
+            properties:
+              contactDetails: string
+        responses:
+          404:
+            description: null
+          200:
+            description: null
+
+/photo?href={imageId}:
+  description: Get photo
+  get:
+    description: Get photo
+    body:
+      application/json:
+        type: object
+        properties:
+          href: string
+    responses:
+      404:
+        description: null
+      200:
+        description: null
+
+/search:
+  description: Search contacts by name
+  post:
+    description: Search contacts by name
+    body:
+      application/json:
+        type: object
+        properties:
+          name: string
+    responses:
+      404:
+        description: null
+      200:
+        description: null
+
+/feedback/learnmore:
+  description: Send "Learn more" frorm a landing page
+  post:
+    description: Send "Learn more" frorm a landing page
+    body:
+      application/json:
+        type: object
+        properties:
+          message: string
+          name: string
+          title: string
+          company: string
+          phone: string
+    responses:
+      202:
+        description: accepted
+      400:
+        description: bad request
